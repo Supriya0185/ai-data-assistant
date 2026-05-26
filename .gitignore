@@ -1,0 +1,34 @@
+# Dependencies - huge folder, never commit
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment files - HAS YOUR API KEYS - NEVER COMMIT
+.env
+.env.local
+.env.production
+backend/.env
+frontend/.env
+
+# User uploaded files - private data
+backend/uploads/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+
+# DuckDB temp files
+*.duckdb
+*.duckdb.wal
