@@ -1,0 +1,12 @@
+name,age,department,salary,hire_date,active
+Alice Johnson,32,Engineering,95000,2020-03-15,true
+Bob Smith,28,Marketing,65000,2021-07-01,true
+Charlie Brown,45,Engineering,120000,2015-01-10,true
+Diana Prince,35,HR,72000,2019-11-20,false
+Eve Davis,29,Marketing,68000,2022-02-14,true
+Frank Wilson,38,Engineering,105000,2017-06-30,true
+Grace Lee,41,HR,78000,2016-09-05,true
+Henry Martinez,26,Marketing,,2023-01-15,true
+Iris Chen,33,Engineering,98000,2020-08-22,true
+Jack Taylor,50,Management,150000,2010-04-01,true
+Alice Johnson,32,Engineering,95000,2020-03-15,true
