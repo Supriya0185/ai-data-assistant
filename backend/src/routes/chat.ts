@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
-import { ClaudeService } from '../services/claudeService';
+import { AIService } from '../services/aiService';
 import { DuckDBService } from '../services/duckdbService';
 import { SessionService } from '../services/sessionService';
 import { validateSQL } from '../middleware/sqlValidator';
@@ -47,8 +47,8 @@ router.post(
         { role: 'assistant' as const, content: q.result ? `Found ${q.result.rowCount} results.` : 'Processed.' },
       ]);
 
-    // Claude chat call
-    const { message: aiMessage, sql, chart } = await ClaudeService.chat(
+    // AI chat call
+    const { message: aiMessage, sql, chart } = await AIService.chat(
       message,
       history,
       sessionContext,
@@ -57,7 +57,7 @@ router.post(
 
     let queryResult;
 
-    // If Claude generated SQL — validate and run it
+    // If AI generated SQL — validate and run it
     if (sql) {
       const validation = validateSQL(sql);
       if (validation.isSafe && dataset) {

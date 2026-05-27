@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
-import { ClaudeService } from '../services/claudeService';
+import { AIService } from '../services/aiService';
 import { DuckDBService } from '../services/duckdbService';
 import { SessionService } from '../services/sessionService';
 import { validateSQL } from '../middleware/sqlValidator';
@@ -39,7 +39,7 @@ router.post(
     const sessionContext = SessionService.buildContext(session);
 
     // Step 1: Generate SQL
-    const sql = await ClaudeService.generateSQL(question, dataset, sessionContext);
+    const sql = await AIService.generateSQL(question, dataset, sessionContext);
 
     // Step 2: Validate SQL safety
     const validation = validateSQL(sql);
@@ -55,7 +55,7 @@ router.post(
     const queryResult = await DuckDBService.query(validation.normalizedSQL);
 
     // Step 4: Summarize results
-    const { summary, chart } = await ClaudeService.summarizeResults(
+    const { summary, chart } = await AIService.summarizeResults(
       question,
       queryResult,
       dataset

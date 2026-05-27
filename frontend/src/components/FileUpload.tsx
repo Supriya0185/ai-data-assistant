@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Upload, FileText, Loader2 } from 'lucide-react';
+import { Upload, FileText, Loader2, CheckCircle } from 'lucide-react';
 import { useChatStore } from '../store/chatStore';
 
 const ACCEPTED = {
@@ -30,38 +30,67 @@ export const FileUpload: React.FC = () => {
     disabled: uploadStatus === 'uploading',
   });
 
+  if (uploadStatus === 'success') {
+    return (
+      <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-3 py-2.5">
+        <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+        <p className="text-xs text-emerald-400 font-medium">File loaded! Upload another below.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full">
       <div
         {...getRootProps()}
         className={`
-          border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all duration-200
-          ${isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'}
-          ${uploadStatus === 'uploading' ? 'opacity-60 cursor-not-allowed' : ''}
+          relative border-2 border-dashed rounded-xl p-5 text-center cursor-pointer
+          transition-all duration-200 overflow-hidden
+          ${isDragActive
+            ? 'border-indigo-500 bg-indigo-500/10'
+            : 'border-slate-700 hover:border-indigo-500/50 hover:bg-slate-800/50'
+          }
+          ${uploadStatus === 'uploading' ? 'opacity-60 cursor-not-allowed pointer-events-none' : ''}
         `}
       >
         <input {...getInputProps()} />
 
-        <div className="flex flex-col items-center gap-2">
+        {/* Background gradient on drag */}
+        {isDragActive && (
+          <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/5 to-violet-500/5 pointer-events-none" />
+        )}
+
+        <div className="relative flex flex-col items-center gap-2">
           {uploadStatus === 'uploading' ? (
             <>
-              <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
-              <p className="text-sm text-blue-600 font-medium">Processing file...</p>
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+                <Loader2 className="w-5 h-5 text-indigo-400 animate-spin" />
+              </div>
+              <div>
+                <p className="text-sm text-indigo-400 font-semibold">Processing…</p>
+                <p className="text-xs text-slate-500 mt-0.5">Analyzing your data</p>
+              </div>
             </>
           ) : (
             <>
-              {isDragActive ? (
-                <FileText className="w-8 h-8 text-blue-500" />
-              ) : (
-                <Upload className="w-8 h-8 text-gray-400" />
-              )}
+              <div className={`
+                w-10 h-10 rounded-xl flex items-center justify-center transition-colors
+                ${isDragActive ? 'bg-indigo-500/20' : 'bg-slate-800'}
+              `}>
+                {isDragActive ? (
+                  <FileText className="w-5 h-5 text-indigo-400" />
+                ) : (
+                  <Upload className="w-5 h-5 text-slate-400" />
+                )}
+              </div>
               <div>
-                <p className="text-sm font-medium text-gray-700">
-                  {isDragActive ? 'Drop your file here' : 'Upload a data file'}
+                <p className="text-xs font-semibold text-slate-300">
+                  {isDragActive ? 'Drop file here' : 'Upload data file'}
                 </p>
-                <p className="text-xs text-gray-400 mt-1">
-                  CSV, Excel, PDF, JSON · Max 50MB
+                <p className="text-xs text-slate-500 mt-0.5">
+                  CSV · Excel · PDF · JSON
                 </p>
+                <p className="text-xs text-slate-600 mt-0.5">Max 50 MB</p>
               </div>
             </>
           )}
@@ -69,7 +98,10 @@ export const FileUpload: React.FC = () => {
       </div>
 
       {uploadStatus === 'error' && uploadError && (
-        <p className="mt-2 text-xs text-red-500">⚠️ {uploadError}</p>
+        <div className="mt-2 flex items-start gap-1.5 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+          <span className="text-red-400 text-xs">⚠</span>
+          <p className="text-xs text-red-400">{uploadError}</p>
+        </div>
       )}
     </div>
   );
